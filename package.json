@@ -1,31 +1,25 @@
 {
-    "name": "AwesomeGame",
-    "version": "0.1.0",
-    "filenameBase": "awesomegame",
-    "description": "Description for AwesomeGame.",
-    "author": {
-        "name" : "",
-        "email" : ""
-        },
-
-    "homepage": "http://kiwijs.org/",
-    "bugs": "",
-    "license": "MIT",
-    "licenseUrl": "",
-
-    "repository": {
-        "type": "git",
-        "url": ""
-    },
-
-    "main": "src",
-
-    "dependencies": {},
-    "devDependencies": {
-        "grunt": "~0.4.x",
-        "grunt-contrib-uglify": "0.2.x",
-        "grunt-contrib-copy":  "0.4.x",
-        "grunt-contrib-concat" : "latest",
-        "grunt-contrib-connect": "~0.3.0"
-    }
+  "name": "awesome-game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DeadpoolAndObjectOrientedProgramming/awesome-game.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DeadpoolAndObjectOrientedProgramming/awesome-game/issues"
+  },
+  "homepage": "https://github.com/DeadpoolAndObjectOrientedProgramming/awesome-game#readme",
+  "dependencies": {
+    "browserify": "^11.0.1",
+    "gulp": "^3.9.0",
+    "pixi.js": "^3.0.7",
+    "vinyl-source-stream": "^1.1.0"
+  }
 }
