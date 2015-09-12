@@ -1,39 +1,43 @@
 var PIXI = require('pixi.js');
 
+var direction = 'RIGHT';
+var speed = 5
+
 // You can use either `new PIXI.WebGLRenderer`, `new PIXI.CanvasRenderer`, or `PIXI.autoDetectRenderer`
 // which will try to choose the best renderer for the environment you are in.
-var renderer = new PIXI.WebGLRenderer(800, 600);
+var renderer = new PIXI.WebGLRenderer(400, 600);
 
 // The renderer will create a canvas element for you that you can then insert into the DOM.
 document.body.appendChild(renderer.view);
 
-// You need to create a root container that will hold the scene you want to draw.
 var stage = new PIXI.Container();
 
-// This creates a texture from a 'bunny.png' image.
-var bunnyTexture = PIXI.Texture.fromImage('bunny.png');
-var bunny = new PIXI.Sprite(bunnyTexture);
+var paddleTexture = PIXI.Texture.fromImage('paddle.png');
+var paddle = new PIXI.Sprite(paddleTexture);
 
-// Setup the position and scale of the bunny
-bunny.position.x = 400;
-bunny.position.y = 300;
+paddle.position.x = 0;
+paddle.position.y = 600 - 24;
 
-bunny.scale.x = 2;
-bunny.scale.y = 2;
+stage.addChild(paddle);
 
-// Add the bunny to the scene we are building.
-stage.addChild(bunny);
-
-// kick off the animation loop (defined below)
 animate();
 
 function animate() {
   // start the timer for the next animation loop
   requestAnimationFrame(animate);
 
-// each frame we spin the bunny around a bit
-bunny.rotation += 0.01;
+  if (direction === 'RIGHT' && paddle.position.x + 112 > 400) {
+    direction = 'LEFT';
+  } else if (direction === 'LEFT' && paddle.position.x < 0) {
+    direction = 'RIGHT';
+  }
 
-// this is the main render call that makes pixi draw your container and its children.
-renderer.render(stage);
+  if (direction === 'RIGHT') {
+    paddle.position.x += speed;
+  } else if (direction === 'LEFT') {
+    paddle.position.x -= speed;
+  }
+
+  // this is the main render call that makes pixi draw your container and its children.
+  renderer.render(stage);
 }
