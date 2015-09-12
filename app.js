@@ -1,16 +1,22 @@
 var PIXI = require('pixi.js');
 
+// Paddle variables
 var direction = null;
 var speed = 5
 
-// You can use either `new PIXI.WebGLRenderer`, `new PIXI.CanvasRenderer`, or `PIXI.autoDetectRenderer`
-// which will try to choose the best renderer for the environment you are in.
-var renderer = new PIXI.WebGLRenderer(400, 600);
+var renderer = new PIXI.autoDetectRenderer(400, 600);
 
-// The renderer will create a canvas element for you that you can then insert into the DOM.
 document.body.appendChild(renderer.view);
 
 var stage = new PIXI.Container();
+
+var backgroundTexture = PIXI.Texture.fromImage('background.jpg');
+var background = new PIXI.Sprite(backgroundTexture);
+
+background.position.x = 0;
+background.position.y = 0;
+
+stage.addChild(background);
 
 var paddleTexture = PIXI.Texture.fromImage('paddle.png');
 var paddle = new PIXI.Sprite(paddleTexture);
