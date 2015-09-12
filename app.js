@@ -20,6 +20,14 @@ paddle.position.y = 600 - 24;
 
 stage.addChild(paddle);
 
+var ballTexture = PIXI.Texture.fromImage('ball.png');
+var ball = new PIXI.Sprite(ballTexture);
+
+ball.position.x = 200;
+ball.position.y = 300;
+
+stage.addChild(ball);
+
 animate();
 
 window.addEventListener('keyup', function(event) {
