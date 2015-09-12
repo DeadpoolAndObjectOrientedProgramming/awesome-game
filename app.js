@@ -1,6 +1,6 @@
 var PIXI = require('pixi.js');
 
-var direction = 'RIGHT';
+var direction = null;
 var speed = 5
 
 // You can use either `new PIXI.WebGLRenderer`, `new PIXI.CanvasRenderer`, or `PIXI.autoDetectRenderer`
@@ -21,6 +21,20 @@ paddle.position.y = 600 - 24;
 stage.addChild(paddle);
 
 animate();
+
+window.addEventListener('keyup', function(event) {
+  event.preventDefault();
+  direction = null;
+}, false);
+
+document.addEventListener('keydown', function(event) {
+  event.preventDefault();
+  if (event.keyIdentifier === 'Left') {
+    direction = 'LEFT';
+  } else if (event.keyIdentifier === 'Right') {
+    direction = 'RIGHT';
+  }
+}, false);
 
 function animate() {
   // start the timer for the next animation loop
