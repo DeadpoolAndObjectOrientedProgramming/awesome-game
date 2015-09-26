@@ -1,8 +1,9 @@
 var PIXI = require('pixi.js');
 
 // Paddle variables
-var direction = null;
-var speed = 5
+var dir_right = false;
+var dir_left = false;
+var speed = 8;
 
 var renderer = new PIXI.autoDetectRenderer(400, 600);
 
@@ -38,15 +39,21 @@ animate();
 
 window.addEventListener('keyup', function(event) {
   event.preventDefault();
-  direction = null;
+  if (event.keyIdentifier === 'Left') {
+    dir_left = false;
+  }
+  else if (event.keyIdentifier === 'Right') {
+    dir_right = false;
+  }
 }, false);
 
 document.addEventListener('keydown', function(event) {
   event.preventDefault();
   if (event.keyIdentifier === 'Left') {
-    direction = 'LEFT';
-  } else if (event.keyIdentifier === 'Right') {
-    direction = 'RIGHT';
+    dir_left = true;
+  } 
+  else if (event.keyIdentifier === 'Right') {
+    dir_right = true;
   }
 }, false);
 
@@ -54,15 +61,10 @@ function animate() {
   // start the timer for the next animation loop
   requestAnimationFrame(animate);
 
-  if (direction === 'RIGHT' && paddle.position.x + 112 > 400) {
-    direction = 'LEFT';
-  } else if (direction === 'LEFT' && paddle.position.x < 0) {
-    direction = 'RIGHT';
-  }
-
-  if (direction === 'RIGHT') {
+  if (dir_right && paddle.position.x + paddle.width <= background.width && !dir_left) {
     paddle.position.x += speed;
-  } else if (direction === 'LEFT') {
+  } 
+  else if (dir_left && paddle.position.x >= 0 && !dir_right) {
     paddle.position.x -= speed;
   }
 
