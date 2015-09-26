@@ -1,4 +1,5 @@
 var PIXI = require('pixi.js');
+var ready = false;
 
 // Paddle variables
 var paddle = {
@@ -8,7 +9,12 @@ var paddle = {
   margin: 5
 };
 var background = {};
-var ball = {};
+var ball = {
+  speed: {
+    x: 5,
+    y: 5
+  }
+};
 
 // Pixi stage
 var renderer = new PIXI.autoDetectRenderer(400, 600);
@@ -43,6 +49,8 @@ PIXI.loader
     stage.addChild(background.sprite);
     stage.addChild(paddle.sprite);
     stage.addChild(ball.sprite);
+
+    ready = true;
   });
 
 animate();
@@ -70,7 +78,11 @@ document.addEventListener('keydown', function(event) {
 function animate() {
   // start the timer for the next animation loop
   requestAnimationFrame(animate);
+  if (!ready) {
+    return;
+  }
 
+  // ********* Paddle *********
   // Only move the paddle if only one of the directions is pressed
   if (paddle.right && !paddle.left &&
       paddle.sprite.position.x + paddle.sprite.width <= renderer.width - paddle.margin) {
@@ -79,6 +91,19 @@ function animate() {
   else if (paddle.left && !paddle.right &&
            paddle.sprite.position.x >= paddle.margin && !paddle.right) {
     paddle.sprite.position.x -= paddle.speed;
+  }
+
+  // ********* Ball *********
+  ball.sprite.position.x += ball.speed.x;
+  ball.sprite.position.y += ball.speed.y;
+
+  if (ball.sprite.position.x + ball.sprite.width > renderer.width ||
+      ball.sprite.position.x < 0) {
+    ball.speed.x = -ball.speed.x;
+  }
+  else if (ball.sprite.position.y + ball.sprite.height > renderer.height ||
+           ball.sprite.position.y < 0) {
+    ball.speed.y = -ball.speed.y;
   }
 
   // this is the main render call that makes pixi draw your container and its children.
