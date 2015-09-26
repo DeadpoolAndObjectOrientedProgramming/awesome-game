@@ -1,59 +1,69 @@
 var PIXI = require('pixi.js');
 
 // Paddle variables
-var dir_right = false;
-var dir_left = false;
-var speed = 8;
+var paddle = {
+  right: false,
+  left: false,
+  speed: 8,
+  margin: 5
+};
+var background = {};
+var ball = {};
 
+// Pixi stage
 var renderer = new PIXI.autoDetectRenderer(400, 600);
+var stage = new PIXI.Container();
 
 document.body.appendChild(renderer.view);
 
-var stage = new PIXI.Container();
+PIXI.loader
+  .add('background', 'images/background.jpg')
+  .add('paddle', 'images/paddle.png')
+  .add('ball', 'images/ball.png')
+  .on('progress', function (loader) {
+    // Optional loading?
+    // console.log(loader.progress);
+  })
+  .load(function (loader, resources) {
+    background.texture = resources['background'].texture;
+    background.sprite = new PIXI.Sprite(background.texture);
+    background.sprite.position.x = 0;
+    background.sprite.position.y = 0;
 
-var backgroundTexture = PIXI.Texture.fromImage('background.jpg');
-var background = new PIXI.Sprite(backgroundTexture);
+    paddle.texture = resources['paddle'].texture;
+    paddle.sprite = new PIXI.Sprite(paddle.texture);
+    paddle.sprite.position.x = (renderer.width - paddle.sprite.width)/2;
+    paddle.sprite.position.y = renderer.height - paddle.sprite.height; 
 
-background.position.x = 0;
-background.position.y = 0;
+    ball.texture = resources['ball'].texture;
+    ball.sprite = new PIXI.Sprite(ball.texture);
+    ball.sprite.position.x = 200;
+    ball.sprite.position.y = 300;
 
-stage.addChild(background);
-
-var paddleTexture = PIXI.Texture.fromImage('paddle.png');
-var paddle = new PIXI.Sprite(paddleTexture);
-
-paddle.position.x = 0;
-paddle.position.y = 600 - 24;
-
-stage.addChild(paddle);
-
-var ballTexture = PIXI.Texture.fromImage('ball.png');
-var ball = new PIXI.Sprite(ballTexture);
-
-ball.position.x = 200;
-ball.position.y = 300;
-
-stage.addChild(ball);
+    stage.addChild(background.sprite);
+    stage.addChild(paddle.sprite);
+    stage.addChild(ball.sprite);
+  });
 
 animate();
 
 window.addEventListener('keyup', function(event) {
   event.preventDefault();
   if (event.keyIdentifier === 'Left') {
-    dir_left = false;
+    paddle.left = false;
   }
   else if (event.keyIdentifier === 'Right') {
-    dir_right = false;
+    paddle.right = false;
   }
 }, false);
 
 document.addEventListener('keydown', function(event) {
   event.preventDefault();
   if (event.keyIdentifier === 'Left') {
-    dir_left = true;
+    paddle.left = true;
   } 
   else if (event.keyIdentifier === 'Right') {
-    dir_right = true;
+    paddle.right = true;
   }
 }, false);
 
@@ -61,11 +71,14 @@ function animate() {
   // start the timer for the next animation loop
   requestAnimationFrame(animate);
 
-  if (dir_right && paddle.position.x + paddle.width <= background.width && !dir_left) {
-    paddle.position.x += speed;
+  // Only move the paddle if only one of the directions is pressed
+  if (paddle.right && !paddle.left &&
+      paddle.sprite.position.x + paddle.sprite.width <= renderer.width - paddle.margin) {
+    paddle.sprite.position.x += paddle.speed;
   } 
-  else if (dir_left && paddle.position.x >= 0 && !dir_right) {
-    paddle.position.x -= speed;
+  else if (paddle.left && !paddle.right &&
+           paddle.sprite.position.x >= paddle.margin && !paddle.right) {
+    paddle.sprite.position.x -= paddle.speed;
   }
 
   // this is the main render call that makes pixi draw your container and its children.
