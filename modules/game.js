@@ -7,6 +7,7 @@ var ready = false;
 // Game objects
 var paddle = require('./paddle');
 var ball = require('./ball');
+var bricks = require('./bricks');
 var background = {};
 
 var game = {}
@@ -31,6 +32,7 @@ game.init = function init(doc) {
     .add('background', 'images/background.jpg')
     .add('paddle', 'images/paddle.png')
     .add('ball', 'images/ball.png')
+    .add('brick', 'images/brick.png')
     .on('progress', function (loader) {
       // Optional loading?
       // console.log(loader.progress);
@@ -43,10 +45,12 @@ game.init = function init(doc) {
 
       paddle.init(renderer, resources['paddle'].texture, doc);
       ball.init(renderer, resources['ball'].texture);
+      bricks.init(renderer, resources['brick'].texture);
 
       stage.addChild(background.sprite);
       stage.addChild(paddle.sprite);
       stage.addChild(ball.sprite);
+      bricks.addBricksToStage(stage);
 
       ready = true;
     });
