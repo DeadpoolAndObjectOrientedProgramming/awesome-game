@@ -7,7 +7,7 @@ gulp.task('default', ['serve', 'watch']);
 
 gulp.task('watch', ['build'], function() {
   gulp.watch('app.js', ['build']);  
-  gulp.watch(['./pub/*.*'], ['reload']);
+  gulp.watch(['./pub/*.*', './modules/*.*'], ['reload']);
 });
 
 gulp.task('build', function() {
