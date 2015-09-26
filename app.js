@@ -75,14 +75,7 @@ document.addEventListener('keydown', function(event) {
   }
 }, false);
 
-function animate() {
-  // start the timer for the next animation loop
-  requestAnimationFrame(animate);
-  if (!ready) {
-    return;
-  }
-
-  // ********* Paddle *********
+function animate_paddle() {
   // Only move the paddle if only one of the directions is pressed
   if (paddle.right && !paddle.left &&
       paddle.sprite.position.x + paddle.sprite.width <= renderer.width - paddle.margin) {
@@ -92,8 +85,9 @@ function animate() {
            paddle.sprite.position.x >= paddle.margin && !paddle.right) {
     paddle.sprite.position.x -= paddle.speed;
   }
+}
 
-  // ********* Ball *********
+function animate_ball() {
   ball.sprite.position.x += ball.speed.x;
   ball.sprite.position.y += ball.speed.y;
 
@@ -101,10 +95,41 @@ function animate() {
       ball.sprite.position.x < 0) {
     ball.speed.x = -ball.speed.x;
   }
-  else if (ball.sprite.position.y + ball.sprite.height > renderer.height ||
-           ball.sprite.position.y < 0) {
+  else if (ball.sprite.position.y < 0) {
     ball.speed.y = -ball.speed.y;
   }
+  else if (ball.sprite.position.y + ball.sprite.height > renderer.height) {
+    ball.sprite.position.x = 200;
+    ball.sprite.position.y = 300;
+    ball.speed.x = 5;
+    ball.speed.y = 5;
+  }
+
+  // Check for paddle collision
+  if (check_collision(ball.sprite, paddle.sprite)) {
+    ball.speed.y = -Math.abs(ball.speed.y)
+  }
+}
+
+function check_collision(a, b) {
+  return a.position.y + a.height > b.position.y &&
+         a.position.x + a.width > b.position.x &&
+         a.position.x < b.position.x + b.width;
+}
+
+
+function animate() {
+  // start the timer for the next animation loop
+  requestAnimationFrame(animate);
+  if (!ready) {
+    return;
+  }
+
+  // ********* Paddle *********
+  animate_paddle();
+
+  // ********* Ball *********
+  animate_ball();
 
   // this is the main render call that makes pixi draw your container and its children.
   renderer.render(stage);
