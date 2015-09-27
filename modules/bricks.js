@@ -1,3 +1,4 @@
+'use strict';
 var PIXI = require('pixi.js');
 
 var bricks = {
@@ -5,11 +6,11 @@ var bricks = {
 };
 var rows = 5;
 var colors = [
-  "0xFF0000",
-  "0x00FF00",
-  "0x7777FF",
-  "0xFF00FF",
-  "0x00FFFF"
+  '0xFF0000',
+  '0x00FF00',
+  '0x7777FF',
+  '0xFF00FF',
+  '0x00FFFF'
 ];
 
 var numInRow;
@@ -22,13 +23,13 @@ bricks.init = function init(renderer, texture) {
   totalWidth = bricks.texture.width * numInRow;
   startPosX = (renderer.width - totalWidth)/2;
   bricks.reset();
-}
+};
 
 bricks.addBricksToStage = function addBricksToStage(stage) {
   for (var i = 0; i < bricks.bricks.length; i++) {
     stage.addChild(bricks.bricks[i]);
   }
-}
+};
 
 bricks.destroy = function destroy(brick, stage) {
   var index = bricks.bricks.indexOf(brick);
@@ -36,11 +37,11 @@ bricks.destroy = function destroy(brick, stage) {
     bricks.bricks.splice(index, 1);
   }
   stage.removeChild(brick);
-}
+};
 
 bricks.reset = function reset(stage) {
-  for (var b = 0; b < bricks.bricks.length; b++) {
-    stage.removeChild(bricks.bricks[b]);
+  for (var i = 0; i < bricks.bricks.length; i++) {
+    stage.removeChild(bricks.bricks[i]);
   }
 
   bricks.bricks = [];
@@ -53,6 +54,6 @@ bricks.reset = function reset(stage) {
       bricks.bricks.push(b);
     }
   }
-}
+};
 
 module.exports = bricks;

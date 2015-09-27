@@ -1,3 +1,4 @@
+'use strict';
 var PIXI = require('pixi.js');
 
 var paddle = {
@@ -37,23 +38,23 @@ paddle.init = function init(renderer, texture, doc) {
       paddle.right = true;
     }
   }, false);
-}
+};
 
 paddle.startPos = function startPos() {
   paddle.sprite.position.x = (rendererWidth - paddle.sprite.width)/2;
   paddle.sprite.position.y = rendererHeight - paddle.sprite.height;
-}
+};
 
 paddle.update = function update(renderer) {
   if (paddle.right && !paddle.left && 
       paddle.sprite.position.x + paddle.sprite.width <= renderer.width - paddle.margin) {
     paddle.sprite.position.x += paddle.speed;
   }
-  else if (paddle.left & !paddle.right &&
+  else if (paddle.left && !paddle.right &&
            paddle.sprite.position.x >= paddle.margin && !paddle.right) {
     paddle.sprite.position.x -= paddle.speed;
   }
-}
+};
 
 
 module.exports = paddle;
