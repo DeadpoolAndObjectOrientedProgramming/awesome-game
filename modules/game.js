@@ -18,10 +18,11 @@ game.animate = function animate() {
     return;
   }
 
-  paddle.animate(renderer);
+  paddle.update(renderer);
 
-  ball.check_collision(paddle.sprite);
-  ball.animate(renderer);
+  ball.paddle_collision(paddle.sprite);
+  ball.update(renderer, game.reset);
+  ball.bricks_collision(bricks, stage);
 
   renderer.render(stage);
 }
@@ -54,6 +55,13 @@ game.init = function init(doc) {
 
       ready = true;
     });
+}
+
+game.reset = function reset() {
+  ball.startPos();
+  paddle.startPos();
+  bricks.reset(stage);
+  bricks.addBricksToStage(stage);
 }
 
 module.exports = game;

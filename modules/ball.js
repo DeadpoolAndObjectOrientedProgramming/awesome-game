@@ -1,33 +1,48 @@
 var PIXI = require('pixi.js');
-var did_collide = require('./misc').check_collision;
+var check_collision = require('./misc').check_collision
 
-var default_speed = 5;
-var starting_pos = {
+var defaultSpeed = 5;
+var startingPos = {
   x: 200,
   y: 300
 }
 
 var ball = {
   speed: {
-    x: default_speed,
-    y: default_speed
+    x: defaultSpeed,
+    y: defaultSpeed
   }
 };
 
 ball.init = function init(renderer, texture) {
   ball.texture = texture;
   ball.sprite = new PIXI.Sprite(ball.texture);
-  ball.sprite.position.x = starting_pos.x;
-  ball.sprite.position.y = starting_pos.y;
+  ball.startPos();
 }
 
-ball.check_collision = function check_collision(element) {
-  if (did_collide(ball.sprite, element)) {
-    ball.speed.y = -default_speed;
+ball.startPos = function startPos() {
+  ball.sprite.position.x = startingPos.x;
+  ball.sprite.position.y = startingPos.y;
+  ball.speed.x = defaultSpeed;
+  ball.speed.y = defaultSpeed;
+}
+
+ball.paddle_collision = function paddle_collision(element) {
+  if (check_collision(ball.sprite, element)) {
+    ball.speed.y = -defaultSpeed;
   }
 }
 
-ball.animate = function animate(renderer) {
+ball.bricks_collision = function bricks_collision(bricks, stage) {
+  for (var b = 0; b < bricks.bricks.length; b++) {
+    if (check_collision(ball.sprite, bricks.bricks[b])) {
+      ball.speed.y = -ball.speed.y;
+      bricks.destroy(bricks.bricks[b], stage);
+    }
+  }
+}
+
+ball.update = function update(renderer, reset) {
   ball.sprite.position.x += ball.speed.x;
   ball.sprite.position.y += ball.speed.y;
 
@@ -39,10 +54,7 @@ ball.animate = function animate(renderer) {
     ball.speed.y = -ball.speed.y;
   }
   else if (ball.sprite.position.y + ball.sprite.height > renderer.height) {
-    ball.sprite.position.x = starting_pos.x;
-    ball.sprite.position.y = starting_pos.y;
-    ball.speed.x = default_speed;
-    ball.speed.y = default_speed;
+    reset();
   }
 }
 

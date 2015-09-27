@@ -6,12 +6,16 @@ var paddle = {
   speed: 8,
   margin: 5
 };
+var rendererWidth;
+var rendererHeight;
 
 paddle.init = function init(renderer, texture, doc) {
   paddle.texture = texture;
   paddle.sprite = new PIXI.Sprite(paddle.texture);
-  paddle.sprite.position.x = (renderer.width - paddle.sprite.width)/2;
-  paddle.sprite.position.y = renderer.height - paddle.sprite.height;
+  rendererWidth = renderer.width;
+  rendererHeight = renderer.height;
+
+  paddle.startPos();
 
   // Add event listeners to move the paddle
   doc.addEventListener('keyup', function(event) {
@@ -35,7 +39,12 @@ paddle.init = function init(renderer, texture, doc) {
   }, false);
 }
 
-paddle.animate = function animate(renderer) {
+paddle.startPos = function startPos() {
+  paddle.sprite.position.x = (rendererWidth - paddle.sprite.width)/2;
+  paddle.sprite.position.y = rendererHeight - paddle.sprite.height;
+}
+
+paddle.update = function update(renderer) {
   if (paddle.right && !paddle.left && 
       paddle.sprite.position.x + paddle.sprite.width <= renderer.width - paddle.margin) {
     paddle.sprite.position.x += paddle.speed;
